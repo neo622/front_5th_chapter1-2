@@ -1,7 +1,21 @@
 export function normalizeVNode(vNode) {
-  const exceptionCase = [null, undefined, true, false];
-  vNode = !exceptionCase.includes(vNode) ? vNode : "";
-  vNode =
-    vNode === "" && typeof vNode === "string" ? vNode : JSON.stringify(vNode);
-  return vNode;
+  if (vNode == null || typeof vNode === "boolean") return "";
+  if (typeof vNode === "string") return vNode;
+  if (typeof vNode === "number") return JSON.stringify(vNode);
+
+  if (typeof vNode.type === "function") {
+    const component = vNode.type({
+      ...vNode.props,
+      children: vNode.children,
+    });
+
+    return normalizeVNode(component);
+  }
+  return {
+    type: vNode.type,
+    props: vNode.props,
+    children: Array.isArray(vNode.children)
+      ? vNode.children.map(normalizeVNode).filter((node) => node != "")
+      : vNode.children,
+  };
 }
