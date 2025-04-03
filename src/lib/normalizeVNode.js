@@ -1,7 +1,7 @@
 export function normalizeVNode(vNode) {
   if (vNode == null || typeof vNode === "boolean") return "";
   if (typeof vNode === "string") return vNode;
-  if (typeof vNode === "number") return JSON.stringify(vNode);
+  if (typeof vNode === "number") return vNode.toString();
 
   if (typeof vNode.type === "function") {
     const component = vNode.type({

@@ -2,33 +2,25 @@ import { addEvent } from "./eventManager";
 import { normalizeVNode } from "./normalizeVNode";
 //virtualDOM -> realDOM
 export function createElement(vNode) {
-  // 예외 처리
   if (vNode == null || typeof vNode === "boolean") {
     return document.createTextNode("");
   }
 
-  // 문자열 or 숫자 → TextNode
   if (typeof vNode === "string" || typeof vNode === "number") {
-    return document.createTextNode(String(vNode));
+    return document.createTextNode(vNode);
   }
 
-  // 배열 → DocumentFragment
   if (Array.isArray(vNode)) {
-    const fragment = document.createDocumentFragment();
-    vNode
-      .map(normalizeVNode) // virtualDOM 객체를 받을 수 있도록 전부 Normalize 진행
-      .forEach((child) => fragment.appendChild(createElement(child)));
-    return fragment;
+    const docFrag = document.createDocumentFragment();
+    docFrag.append(...vNode.map(createElement));
+    return docFrag;
   }
-  // 일반 VNode 처리
-  const $el = document.createElement(vNode.type);
-  // 속성 처리
-  updateAttributes($el, vNode.props);
-  // 자식 처리
-  (vNode.children || []).forEach((child) => {
-    $el.appendChild(createElement(child));
-  });
-  return $el;
+
+  const el = document.createElement(vNode.type);
+  vNode.children.map(createElement).forEach((child) => el.appendChild(child));
+
+  updateAttributes(el, vNode.props);
+  return el;
 }
 
 function updateAttributes($el, props) {
