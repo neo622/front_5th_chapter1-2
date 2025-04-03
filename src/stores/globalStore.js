@@ -65,37 +65,22 @@ export const globalStore = createStore(
       };
       return { ...state, posts: [newContent, ...state.posts] };
     },
-    addLike(state, id) {
-      if (!state.loggedIn) {
-        window.alert("로그인 후 이용해주세요");
-        return;
-      }
-      const postIdx = id - 1;
-      const post = state.posts[postIdx];
-      const username = state.currentUser.username;
-
-      let updatedLikeUsers;
-
-      if (post.likeUsers.includes(username)) {
-        // 이미 좋아요 눌렀으면 제거
-        updatedLikeUsers = post.likeUsers.filter((user) => user !== username);
-      } else {
-        // 좋아요 안 눌렀으면 추가
-        updatedLikeUsers = [...post.likeUsers, username];
-      }
-
-      const updatedPost = {
-        ...post,
-        likeUsers: updatedLikeUsers,
-      };
-
-      const updatedPosts = [...state.posts];
-      updatedPosts[postIdx] = updatedPost;
-
-      return {
-        ...state,
-        posts: updatedPosts,
-      };
+    togglePostLike(state, username, postId) {
+      const newPosts = state.posts.map((post) => {
+        if (post.id === postId) {
+          const likeUsers = post.likeUsers;
+          const newLikeUsers = likeUsers.includes(username)
+            ? likeUsers.filter((name) => name !== username)
+            : likeUsers.concat(username);
+          return {
+            ...post,
+            likeUsers: newLikeUsers,
+          };
+        } else {
+          return post;
+        }
+      });
+      return { ...state, posts: newPosts };
     },
   },
 );
