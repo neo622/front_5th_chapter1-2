@@ -1,1 +1,0 @@
-import{r as a,c as n,a as r,g as o,H as s,U as g,b as t,P as i,F as l,L as u}from"./render-BcMaU4nj.js";a.set(n({"/":s,"/login":()=>{const{loggedIn:e}=o.getState();if(e)throw new l;return t(u,null)},"/profile":()=>{const{loggedIn:e}=o.getState();if(!e)throw new g;return t(i,null)}}));function c(){a.get().subscribe(r),o.subscribe(r),r()}c();
