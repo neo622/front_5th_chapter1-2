@@ -1,5 +1,5 @@
 import { addEvent } from "./eventManager";
-import { normalizeVNode } from "./normalizeVNode";
+// import { normalizeVNode } from "./normalizeVNode";
 //virtualDOM -> realDOM
 export function createElement(vNode) {
   if (vNode == null || typeof vNode === "boolean") {
